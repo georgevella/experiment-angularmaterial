@@ -7,4 +7,13 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+
+  private count = 0;
+
+  basicButtonClick(): void {
+    this.count++;
+
+    this.title = 'woz - ' + this.count;
+    console.log('hello');
+  }
 }
