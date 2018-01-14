@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "serve:wds": "webpack-dev-server --progress --colors --hot --progress --open --config config/webpack.dev.js",
+    "serve:wds": "webpack-dev-server --progress --colors --hot --progress --config config/webpack.dev.js",
     "serve:ng": "ng serve"
   },
   "private": true,

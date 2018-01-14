@@ -7,7 +7,8 @@ module.exports = {
   entry: {
     polyfills: "./src/polyfills.ts",
     //    'vendor': './src/vendor.ts',
-    app: "./src/main.ts"
+    main: "./src/main.ts",
+    styles: ["./src/styles.css"]
   },
 
   resolve: {
@@ -20,10 +21,9 @@ module.exports = {
         test: /\.ts$/,
         loaders: [
           {
-            //loader: 'awesome-typescript-loader',
             loader: "@ngtools/webpack",
             options: { tsConfigPath: helpers.root("src", "tsconfig.app.json") }
-          } //, 'angular2-template-loader'
+          } 
         ]
       },
       {
@@ -36,8 +36,27 @@ module.exports = {
         loader: "file-loader?name=assets/[name].[hash].[ext]"
       },
       {
+        test: /\.css$/,                            
+        use: [
+          //"exports-loader?module.exports.toString()",
+          "to-string-loader",
+          {
+            loader: "css-loader",
+            options: {
+              sourceMap: true,
+              import: false
+            }
+          }
+        ],
+        exclude: [helpers.root("src/styles.css")]
+      },
+      {
         test: /\.css$/,
-        use: ["to-string-loader", "style-loader", "css-loader"]
+        use: [
+          "style-loader",
+          "css-loader"
+        ],
+        include: [helpers.root("src/styles.css")]
       }
     ]
   },
@@ -50,13 +69,20 @@ module.exports = {
       helpers.root("./src"), // location of your src
       {} // a map of your routes
     ),
-
-    new webpack.optimize.CommonsChunkPlugin({
-      name: ["app", "polyfills"]
-    }),
-
     new HtmlWebpackPlugin({
-      template: "src/index.html"
+      template: "src/index.html",
+      xhtml: true,
+      minify: false
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      minChunks: Infinity,
+      name: "inline"
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: "main",
+      async: "common",
+      children: true,
+      minChunks: 2
     })
   ]
 };
